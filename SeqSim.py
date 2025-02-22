@@ -25,27 +25,6 @@ def local_alignment(match_reward: int, mismatch_penalty: int, indel_penalty: int
     i = max_pos[0]
     j = max_pos[1]
     return score[i,j]
-    """
-    s_aligned = []
-    t_aligned = []
-    while score[i, j] > 0 and (i > 0 and j > 0):
-        if score[i, j] == score[i - 1, j - 1] + (match_reward if s[i - 1] == t[j - 1] else -mismatch_penalty):
-            s_aligned.append(s[i - 1])
-            t_aligned.append(t[j-1])
-            i -= 1
-            j -= 1
-        elif score[i, j] == score[i , j-1] - indel_penalty:
-            s_aligned.append("-")
-            t_aligned.append(t[j-1])
-            j -= 1
-        elif score[i, j] == score[i-1, j] - indel_penalty:
-            s_aligned.append(s[i-1])
-            t_aligned.append("-")
-            i -= 1
-    
-
-    return (int(max_score), "".join(reversed(s_aligned)), "".join(reversed(t_aligned)))
-    """
 
 
 def SeqSim(s: str, F: List[str], match_reward: int = 1, mismatch_penalty: int = 1, indel_penalty: int = 1) -> int:
