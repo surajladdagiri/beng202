@@ -19,9 +19,7 @@ def fitting_alignment(s: str, t: str, match_reward: int, mismatch_penalty: int, 
             max_count = 0
         else:
             if i == len(s) and j == len(t):
-                for k in range(len(s) + 1):
-                    if k == len(s) and j == len(t):
-                        continue
+                for k in range(len(s)):
                     count, first, second = count_and_path(k, j)
                     if count >= max_count:
                         max_count = count
