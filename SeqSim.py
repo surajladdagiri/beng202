@@ -1,11 +1,12 @@
-from typing import List, Dict, Iterable, Tuple
-import numpy as np
-
-
-def fitting_alignment(s: str, t: str, match_reward: int, mismatch_penalty: int, indel_penalty: int) -> Tuple[int, str, str]:
+def fitting_alignment(s: str, t: str, match_reward: int, mismatch_penalty: int, indel_penalty: int) -> tuple[int, str, str]:
     """
-    Compute the fitting alignment of two strings given a match reward, mismatch penalty, and indel penalty.
-    String t is fit to s (all of t is aligned to s)
+
+    :param s:
+    :param t:
+    :param match_reward:
+    :param mismatch_penalty:
+    :param indel_penalty:
+    :return:
     """
     cache = {}
 
@@ -57,7 +58,16 @@ def fitting_alignment(s: str, t: str, match_reward: int, mismatch_penalty: int, 
     return info
 
 
-def SeqSim(s: str, F: List[str], match_reward: int = 1, mismatch_penalty: int = 1, indel_penalty: int = 1) -> int:
+def SeqSim(s: str, F: list[str], match_reward: int = 1, mismatch_penalty: int = 1, indel_penalty: int = 1) -> int:
+    """
+    A function that calculates the sequence similarity score between s and F using fitting alignment
+    :param s: a string of interest
+    :param F: a set of strings to compare to s
+    :param match_reward: the reward for a match in the fitting alignment
+    :param mismatch_penalty: the penalty for having a mismatch in the fitting alignment
+    :param indel_penalty: the penalty for having an insertion or deletion in the fitting alignment
+    :return: the sum of the fitting alignment score between s and every string in F
+    """
     score = 0
     for f in F:
         curr_score, f_align, s_align = fitting_alignment(f, s, match_reward, mismatch_penalty, indel_penalty)

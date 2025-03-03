@@ -1,9 +1,15 @@
-import RNAFold
+from RNAFold import RNAFold
 
 
 def StructSim(s: str, F: list[str]) -> float:
-    RNAF = [RNAFold.RNAFold(f) for f in F]
-    RNAs = RNAFold.RNAFold(s)
+    """
+    Function that calculates the structural similarity between an RNA sequence and a list of RNA sequences
+    :param s: an RNA sequence
+    :param F: a set of RNA sequences
+    :return: the sum of the Jaccard indices between s and each RNA sequence in F
+    """
+    RNAF = [RNAFold(f) for f in F]
+    RNAs = RNAFold(s)
 
     total_index = 0
     for RNAf in RNAF:
