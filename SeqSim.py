@@ -1,12 +1,12 @@
-def fitting_alignment(s: str, t: str, match_reward: int, mismatch_penalty: int, indel_penalty: int) -> tuple[int, str, str]:
+def fitting_alignment(s: str, t: str, match_reward: float, mismatch_penalty: float, indel_penalty: float) -> tuple[float, str, str]:
     """
 
-    :param s:
-    :param t:
-    :param match_reward:
-    :param mismatch_penalty:
-    :param indel_penalty:
-    :return:
+    :param s: the string that can be partially matched
+    :param t: the string that must be fully matced
+    :param match_reward: the reward for a character match
+    :param mismatch_penalty: the penalty for a character mismatch
+    :param indel_penalty: the penalty for an insertion or deletion in the alignment
+    :return: the total alignment score, the alignment for string s, the alignment for string t
     """
     cache = {}
 
@@ -58,7 +58,7 @@ def fitting_alignment(s: str, t: str, match_reward: int, mismatch_penalty: int, 
     return info
 
 
-def SeqSim(s: str, F: list[str], match_reward: int = 1, mismatch_penalty: int = 1, indel_penalty: int = 1) -> int:
+def SeqSim(s: str, F: list[str], match_reward: float = 1, mismatch_penalty: float = 1, indel_penalty: float = float('-inf')) -> tuple[float, list[str]]:
     """
     A function that calculates the sequence similarity score between s and F using fitting alignment
     :param s: a string of interest
@@ -66,9 +66,10 @@ def SeqSim(s: str, F: list[str], match_reward: int = 1, mismatch_penalty: int = 
     :param match_reward: the reward for a match in the fitting alignment
     :param mismatch_penalty: the penalty for having a mismatch in the fitting alignment
     :param indel_penalty: the penalty for having an insertion or deletion in the fitting alignment
-    :return: the sum of the fitting alignment score between s and every string in F
+    :return: the sum of the fitting alignment scores btw s and each string f in F
     """
     score = 0
+    f_strings = []
     for f in F:
         curr_score, f_align, s_align = fitting_alignment(f, s, match_reward, mismatch_penalty, indel_penalty)
         score += curr_score
