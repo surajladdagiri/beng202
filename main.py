@@ -2,47 +2,22 @@
 import Score
 
 fluorescent_seqs = []
+gene = ""
 
-if fluorescent_seqs:
-    k = len(fluorescent_seqs[0])
-else:
-    raise RuntimeError("Please pass in some input sequences!")
+if not fluorescent_seqs:
+    raise RuntimeError("Please pass in some fluorescent sequences!")
 
+if not gene:
+    raise RuntimeError("Please pass in a gene sequence!")
+
+best_score = float('-inf')
+best_f = ""
 for i in range(len(fluorescent_seqs)):
-    if fluorescent_seqs[i] != k:
-        raise RuntimeError("All input sequences must be the same length!")
+    curr_f = fluorescent_seqs[i]
+    sub_str, score = Score.score(gene, curr_f)
+    if best_score < score:
+        best_score, best_f = score, curr_f
+    print(f"For fluorophore sequence {i + 1}:")
+    print(f"Optimal substring in gene: {sub_str}\tScore: {score}")
 
-
-def kmer_set(k: int) -> list[str]:
-    """
-    Generates all possible RNA nucleotide kmers of a given length k
-    :param k: length of kmers to generate
-    :return: list of all possible RNA kmers
-    """
-    nucs = ['A', 'U', 'C', 'G']
-    kmers = []
-    if k == 0:
-        return kmers
-    else:
-        sub_kmers = kmer_set(k - 1)
-        for kmer in sub_kmers:
-            new_kmers = [n + kmer for n in nucs]
-            kmers += new_kmers
-        return kmers
-
-
-best_kmers = []
-best_score = float('inf')
-
-for kmer in kmer_set(k):
-    curr_score = Score.Score(kmer, fluorescent_seqs)
-    if curr_score > best_score:
-        best_score = curr_score
-        best_kmers = [kmer]
-    elif curr_score == best_score:
-        best_kmers.append(kmer)
-
-print("Best overall score: {}".format(best_score))
-print("\nKmers with that score: ")
-for kmer in best_kmers:
-    print(kmer)
+print(f"Best fluorophore: {best_f}\nScore: {best_score}")
