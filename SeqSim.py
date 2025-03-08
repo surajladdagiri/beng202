@@ -1,8 +1,8 @@
 def fitting_alignment(s: str, t: str, match_reward: float, mismatch_penalty: float, indel_penalty: float) -> tuple[float, str, str]:
     """
-
+    A function that finds the best fitting alignment between two strings
     :param s: the string that can be partially matched
-    :param t: the string that must be fully matced
+    :param t: the string that must be fully matched
     :param match_reward: the reward for a character match
     :param mismatch_penalty: the penalty for a character mismatch
     :param indel_penalty: the penalty for an insertion or deletion in the alignment
@@ -58,20 +58,15 @@ def fitting_alignment(s: str, t: str, match_reward: float, mismatch_penalty: flo
     return info
 
 
-def SeqSim(s: str, F: list[str], match_reward: float = 1, mismatch_penalty: float = 1, indel_penalty: float = float('-inf')) -> tuple[float, list[str]]:
+def SeqSim(s: str, f: str, match_reward: float = 1, mismatch_penalty: float = 1, indel_penalty: float = float('-inf')) -> tuple[float, str]:
     """
     A function that calculates the sequence similarity score between s and F using fitting alignment
     :param s: a string of interest
-    :param F: a set of strings to compare to s
+    :param f: a string to compare to s
     :param match_reward: the reward for a match in the fitting alignment
     :param mismatch_penalty: the penalty for having a mismatch in the fitting alignment
     :param indel_penalty: the penalty for having an insertion or deletion in the fitting alignment
-    :return: the sum of the fitting alignment scores btw s and each string f in F
+    :return: the fitting alignment scores btw s and f, the substring of s that fits f
     """
-    score = 0
-    subs = []
-    for f in F:
-        curr_score, s_align, f_align = fitting_alignment(s, f, match_reward, mismatch_penalty, indel_penalty)
-        score += curr_score
-        subs.append(s_align)
-    return score, subs
+    score, s_align, f_align = fitting_alignment(s, f, match_reward, mismatch_penalty, indel_penalty)
+    return score, s_align

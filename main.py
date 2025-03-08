@@ -2,32 +2,22 @@
 import Score
 
 fluorescent_seqs = []
-genes = []
+gene = ""
 
-if fluorescent_seqs:
-    k = len(fluorescent_seqs[0])
-else:
+if not fluorescent_seqs:
     raise RuntimeError("Please pass in some fluorescent sequences!")
 
-for i in range(len(fluorescent_seqs)):
-    if fluorescent_seqs[i] != k:
-        raise RuntimeError("All fluorescent sequences must be the same length!")
-
-if not genes:
-    raise RuntimeError("Please pass in some gene sequences!")
+if not gene:
+    raise RuntimeError("Please pass in a gene sequence!")
 
 best_score = float('-inf')
-best_gs = []
-for i, g in enumerate(genes, start=1):
-    curr_score = Score.Score(g, fluorescent_seqs)
-    print(f"Score for gene {i}: {curr_score}")
-    if curr_score > best_score:
-        best_score = curr_score
-        best_gs = [i]
-    elif curr_score == best_score:
-        best_gs.append(i)
+best_f = ""
+for i in range(len(fluorescent_seqs)):
+    curr_f = fluorescent_seqs[i]
+    sub_str, score = Score.score(gene, curr_f)
+    if best_score < score:
+        best_score, best_f = score, curr_f
+    print(f"For fluorophore sequence {i + 1}:")
+    print(f"Optimal substring in gene: {sub_str}\tScore: {score}")
 
-print("Best overall score: {}".format(best_score))
-print("\nGenes with that score: ")
-for g_i in best_gs:
-    print(g_i)
+print(f"Best fluorophore: {best_f}\nScore: {best_score}")

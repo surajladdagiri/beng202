@@ -1,30 +1,26 @@
 from RNAFold import RNAFold
 
 
-def StructSim(S: list[str], F: list[str]) -> float:
+def StructSim(s: str, f: str) -> float:
     """
     Function that calculates the structural similarity between each ith element pairs of two list of RNA sequences
-    :param S: a set of RNA sequences of a length k
-    :param F: a set of RNA sequences of the same length k
-    :return: the sum of the max Jaccard index between each secondary structures of s_i and each secondary structure of
-    the corresponding f_i in F
+    :param s: an RNA sequence of length k
+    :param f: an RNA sequence of length k
+    :return: the max Jaccard index between each secondary structure of s and each secondary structure of f
     """
 
-    total_index = 0
-    if len(S) != len(F):
+    if len(s) != len(f):
         raise RuntimeError
-    for i in range(len(S)):
-        RNAsi = RNAFold(S[i])
-        RNAfi = RNAFold(F[i])
-        j_index = 0
-        for ss_s in RNAsi:
-            for ss_f in RNAfi:
-                intersect = []
-                for pair in ss_s:
-                    if pair in ss_f:
-                        intersect.append(pair)
-                curr_j = len(intersect) / (len(ss_s) + len(ss_f) - len(intersect))
-                j_index = max(j_index, curr_j)
-        total_index += j_index
+    RNAs = RNAFold(s)
+    RNAf = RNAFold(f)
+    j_index = 0
+    for ss_s in RNAs:
+        for ss_f in RNAf:
+            intersect = []
+            for pair in ss_s:
+                if pair in ss_f:
+                    intersect.append(pair)
+            curr_j = len(intersect) / (len(ss_s) + len(ss_f) - len(intersect))
+            j_index = max(j_index, curr_j)
 
-    return total_index
+    return j_index
