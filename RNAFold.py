@@ -1,4 +1,4 @@
-# import RNA  # pip install viennarna
+import RNA  # pip install viennarna
 
 
 def RNAFold(s: str) -> list[tuple[int, int]]:
