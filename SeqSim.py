@@ -58,7 +58,7 @@ def fitting_alignment(s: str, t: str, match_reward: float, mismatch_penalty: flo
     return info
 
 
-def SeqSim(s: str, F: list[str], match_reward: float = 1, mismatch_penalty: float = 1, indel_penalty: float = float('-inf')) -> float:
+def SeqSim(s: str, F: list[str], match_reward: float = 1, mismatch_penalty: float = 1, indel_penalty: float = float('-inf')) -> tuple[float, list[str]]:
     """
     A function that calculates the sequence similarity score between s and F using fitting alignment
     :param s: a string of interest
@@ -69,7 +69,9 @@ def SeqSim(s: str, F: list[str], match_reward: float = 1, mismatch_penalty: floa
     :return: the sum of the fitting alignment scores btw s and each string f in F
     """
     score = 0
+    subs = []
     for f in F:
-        curr_score, f_align, s_align = fitting_alignment(f, s, match_reward, mismatch_penalty, indel_penalty)
+        curr_score, s_align, f_align = fitting_alignment(s, f, match_reward, mismatch_penalty, indel_penalty)
         score += curr_score
-    return score
+        subs.append(s_align)
+    return score, subs
