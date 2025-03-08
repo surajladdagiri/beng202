@@ -1,31 +1,15 @@
-import RNA  # pip install viennarna
-
-
-def RNAFold(s: str) -> list[tuple[int, int]]:
-    """
-    A function to that returns the base pair interactions in an RNA secondary structure given the RNA sequence
-    :param s: an RNA sequence consisting of RNA nucleotides {A, C, G, U}
-    :return: the RNA secondary structure of s as tuples of interacting base pairs (index starts at 1)
-    """
-    # Obtain RNA secondary structure in dot-bracket notation
-    dot_bracket, mfe = RNA.fold(s)
-
-    # Stack to track base pair positions
-    stack = []
-    base_pairs = []
-
-    # Iterate through structure to find matching parentheses
-    for i, char in enumerate(dot_bracket, start=1):
-        if char == '(':  # Opening bracket, push position onto stack
-            stack.append(i)
-        elif char == ')':  # Closing bracket, pop from stack and record pair
-            if stack:
-                j = stack.pop()
-                base_pairs.append((j, i))
-
-    return base_pairs
-
 def rna_folding(s: str):
+    """
+    Computes the optimal RNA secondary structure using DP.
+
+    This is an implementation of the Nussinov Algorithm.
+
+    Input:
+    s (str): A string representing the RNA sequence consisting of characters {A,U,C,G}
+
+    Output:
+    List[Tuple[int, int]]: A list of tuples where each tuple (i, j) represents a pair of indices in the RNA sequence that form a base pair in the optimal secondary structure.
+    """
     n = len(s)
     dp = [[0] * n for _ in range(n)]
     backtrack = [[None] * n for _ in range(n)]  # Store pairing decisions
@@ -51,7 +35,7 @@ def rna_folding(s: str):
                         dp[i][j] = val
                         backtrack[i][j] = (i+1, k-1, k+1, j, i, k)  # Store the optimal pairing
 
-    # Reconstruct the actual pairs
+    # Utils function to reconstruct the actual pairs
     def traceback(i, j):
         if i >= j:
             return []
@@ -62,10 +46,3 @@ def rna_folding(s: str):
             return [(pi, pk)] + traceback(i1, j1) + traceback(i2, j2)
 
     return traceback(0, n-1)
-
-# Example usage
-rna_string = "AUGCGAU"
-print(rna_folding(rna_string))  # Output: List of (i, j) pairs
-
-
-### CHECK OUT Nussinov Algorithm for RNA structure prediction
