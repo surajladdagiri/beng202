@@ -1,6 +1,5 @@
 #  main file to run our code
-import Score
-
+from code import Score
 fluorescent_seqs = {
     "mangoI": "GGCACGUACGAAGGGACGGUGCGGAGAGGAGAGUACGUGC",
     "mangoII": "GGCACGUACGAAGGAGAGGAGAGGAAGAGGAGAGUACGUGC",
