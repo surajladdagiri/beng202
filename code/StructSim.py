@@ -1,4 +1,4 @@
-from RNAFold import RNAFold
+from RNAFold import rna_folding
 
 
 def StructSim(s: str, f: str) -> float:
@@ -11,8 +11,8 @@ def StructSim(s: str, f: str) -> float:
 
     if len(s) != len(f):
         raise RuntimeError
-    RNAs = RNAFold(s)
-    RNAf = RNAFold(f)
+    RNAs = rna_folding(s)
+    RNAf = rna_folding(f)
     j_index = 0
     for ss_s in RNAs:
         for ss_f in RNAf:
