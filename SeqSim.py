@@ -58,6 +58,31 @@ def fitting_alignment(s: str, t: str, match_reward: float, mismatch_penalty: flo
     return info
 
 
+def hamming(s: str, t: str) -> int:
+    """
+    A function that calculates the Hamming distance between two strings
+    :param s: a string
+    :param t: a string
+    :return: the Hamming distance between s and t
+    """
+    count = 0
+    for i in range(len(s)):
+        if s[i] != t[i]:
+            count += 1
+    return count
+
+
+def SeqSimWithHamming(s: str, t: str):
+    min_score = float('inf')
+    min_sub_str = ""
+    for i in range(len(s) - len(t) + 1):
+        sub_str = s[i:i + len(t)]
+        score = hamming(sub_str, t)
+        if score < min_score:
+            min_score = score
+            min_sub_str = sub_str
+    return min_score, min_sub_str
+
 def SeqSim(s: str, f: str, match_reward: float = 1, mismatch_penalty: float = 1, indel_penalty: float = float('-inf')) -> tuple[float, str]:
     """
     A function that calculates the sequence similarity score between s and F using fitting alignment
