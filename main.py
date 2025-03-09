@@ -1,4 +1,6 @@
 import csv
+import time
+import matplotlib.pyplot as plt
 from source import Score
 
 
@@ -12,6 +14,20 @@ def convert_DNA_to_RNA(seq: str) -> str:
         return_str += convert[n]
 
     return return_str
+
+
+def plot(xs: list[float], ys: dict[str, list[float]], x_label: str, y_label: str, title: str):
+    colors = []
+    for i in range(len(xs)):
+        x_vals = xs[i]
+        y_label, y_vals = list(ys.items())[i]
+        plt.plot(x_vals, y_vals, linestyle='-', color=colors[i % len(colors)], label=y_label)
+
+    plt.xlabel(x_label)
+    plt.ylabel(y_label)
+    plt.title(title)
+    plt.legend()
+    plt.show()
 
 
 # Read fluorescent aptamers from CSV
