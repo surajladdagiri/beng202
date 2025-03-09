@@ -1,19 +1,35 @@
 import csv
 from source import Score
 
+
+# convert a DNA sequence to an RNA sequence
+def convert_DNA_to_RNA(seq: str) -> str:
+    convert = {'T': 'U', 'A': 'A', 'C': 'C', 'G': 'G', 'U': 'U'}
+    return_str = ""
+    for n in seq:
+        if n not in convert:
+            raise RuntimeError
+        return_str += convert[n]
+
+    return return_str
+
+
 # Read fluorescent aptamers from CSV
 fluorescent_seqs = {}
 with open('data/fluorescent_aptamers.csv', mode='r') as file:
     reader = csv.DictReader(file)
     for row in reader:
-        fluorescent_seqs[row['name']] = row['sequence']
+        fluorescent_seqs[row['name']] = convert_DNA_to_RNA(row['sequence'])
 
 # Read genes from CSV
 genes = {}
 with open('data/genes.csv', mode='r') as file:
     reader = csv.DictReader(file)
     for row in reader:
-        genes[row['name']] = row['sequence']
+        genes[row['name']] = convert_DNA_to_RNA(row['sequence'])
+
+top_subs = 10
+a = 0.5
 
 # Ensure mangoI and epsH are available
 if "mangoI" not in fluorescent_seqs:
@@ -31,12 +47,12 @@ for g_name, g_seq in genes.items():
     best_score = float('-inf')
     best_f = ""
     for i in range(len(fluorescent_seqs)):
-        curr_f = fluorescent_seqs[i]
-        sub_str, score = Score.Score(g_seq, curr_f)
+        f_name, f_seq = list(fluorescent_seqs.items())[i]
+        sub_str, score = Score.Score(g_seq, f_seq, top_subs, a)
         if best_score < score:
-            best_score, best_f = score, curr_f
+            best_score, best_f = score, f_name
         print(f"For fluorophore sequence {i + 1}:")
-        print(f"Optimal substring in gene: {sub_str}\tScore: {score}")
+        print(f"Optimal mRNA substring in gene: {sub_str}\tScore: {score}")
 
     print(f"Best fluorophore: {best_f}\nScore: {best_score}")
     print("\n\n")

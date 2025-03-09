@@ -1,5 +1,4 @@
-import StructSim
-import SeqSim
+from source import StructSim, SeqSim
 
 
 def Score(g: str, f: str, n: int, a: float = 0.5) -> tuple[str, float]:
