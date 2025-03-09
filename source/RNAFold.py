@@ -46,3 +46,6 @@ def rna_folding(s: str):
             return [(pi, pk)] + traceback(i1, j1) + traceback(i2, j2)
 
     return traceback(0, n-1)
+
+# #Test
+# print(rna_folding("UAGCAUCGAUCGAUCUACGU"))

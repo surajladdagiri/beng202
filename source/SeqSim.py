@@ -57,7 +57,6 @@ def fitting_alignment(s: str, t: str, match_reward: float, mismatch_penalty: flo
     info = count_and_path(len(s), len(t))
     return info
 
-
 def hamming(s: str, t: str) -> int:
     """
     A function that calculates the Hamming distance between two strings
@@ -70,7 +69,6 @@ def hamming(s: str, t: str) -> int:
         if s[i] != t[i]:
             count += 1
     return count
-
 
 def SeqSimWithHamming(s: str, t: str):
     min_score = float('inf')
