@@ -57,6 +57,7 @@ def fitting_alignment(s: str, t: str, match_reward: float, mismatch_penalty: flo
     info = count_and_path(len(s), len(t))
     return info
 
+
 def hamming(s: str, t: str) -> int:
     """
     A function that calculates the Hamming distance between two strings
@@ -70,26 +71,28 @@ def hamming(s: str, t: str) -> int:
             count += 1
     return count
 
-def SeqSimWithHamming(s: str, t: str):
-    min_score = float('inf')
-    min_sub_str = ""
+
+def SeqSimWithHamming(s: str, t: str, n: int, match_reward: float, mismatch_penalty: float) -> dict[str, float]:
+    subs_and_scores = {}
     for i in range(len(s) - len(t) + 1):
         sub_str = s[i:i + len(t)]
-        score = hamming(sub_str, t)
-        if score < min_score:
-            min_score = score
-            min_sub_str = sub_str
-    return min_score, min_sub_str
+        score = match_reward*len(t) - mismatch_penalty*hamming(sub_str, t)
+        subs_and_scores.update({sub_str: score})
+    subs_and_scores = dict(sorted(subs_and_scores.items(), key=lambda x: x[1], reverse=True)[:n])
+    return subs_and_scores
 
-def SeqSim(s: str, f: str, match_reward: float = 1, mismatch_penalty: float = 1, indel_penalty: float = float('-inf')) -> tuple[float, str]:
+
+def SeqSim(s: str, f: str, n: int, match_reward: float = 1, mismatch_penalty: float = 1, indel_penalty: float = float('-inf')) -> dict[str, float]:
     """
-    A function that calculates the sequence similarity score between s and F using fitting alignment
+    A function that calculates the sequence similarity score between all substrings of s and a string f and returns the
+    top n substrings along with the scores
     :param s: a string of interest
     :param f: a string to compare to s
+    :param n: the number of top substrings of s to return
     :param match_reward: the reward for a match in the fitting alignment
     :param mismatch_penalty: the penalty for having a mismatch in the fitting alignment
     :param indel_penalty: the penalty for having an insertion or deletion in the fitting alignment
-    :return: the fitting alignment scores btw s and f, the substring of s that fits f
+    :return: a dictionary of the top n substrings with the best fitting alignment scores along with their scores
     """
-    score, s_align, f_align = fitting_alignment(s, f, match_reward, mismatch_penalty, indel_penalty)
-    return score, s_align
+
+    return SeqSimWithHamming(s, f, n, match_reward, mismatch_penalty)
