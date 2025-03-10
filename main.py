@@ -68,45 +68,51 @@ with open('data/genes.csv', mode='r') as file:
 
 def_k = 10
 def_alpha = 0.5
+def_beta = 1
+def_gamma = 1
 
 
-def subs_and_scores(gs: [str, str], fs: dict[str, str], top_n: int, alpha: float, enhanced: bool) -> dict[str, tuple[str, float]]:
+def subs_and_scores(gs: [str, str], fs: dict[str, str], top_n: int, alpha: float, beta: float, gamma: float, enhanced: bool) -> dict[str, tuple[str, str, float]]:
     return_dict = {}
     for g_name, g_seq in gs.items():
         print(f"Running for gene {g_name}")
         best_score = float('-inf')
         best_f = ""
+        best_sub = ""
         for i in range(len(fs)):
             f_name, f_seq = list(fs.items())[i]
-            sub_str, score = Score.Score(g_seq, f_seq, top_n, alpha, enhanced)
+            sub_str, score = Score.Score(g_seq, f_seq, top_n, alpha, beta, gamma, enhanced)
             if best_score < score:
-                best_score, best_f = score, f_name
+                best_score, best_f, best_sub= score, f_name, sub_str
             print(f"For fluorophore sequence {i + 1}:")
             print(f"Optimal mRNA substring in gene: {sub_str}\tScore: {score}")
 
         print(f"Best fluorophore: {best_f}\nScore: {best_score}")
         print("\n\n")
-        return_dict[g_name] = (best_f, best_score)
+        return_dict[g_name] = (best_f, best_sub, best_score)
 
     return return_dict
 
 
 # Testing k vs. score
 data = []
+subs = []
 for rna_enhanced in [False, True]:
     score_save = {}
     ks = [1, 5, 10, 15, 25, 50]
     for k in ks:
         f_test = {"mangoI": fluorescent_seqs["mangoI"]}
         g_test = {"epsC": genes['epsC']}
-        f, score = subs_and_scores(g_test, f_test, k, def_alpha, rna_enhanced)['epsC']
+        f, sub, score = subs_and_scores(g_test, f_test, k, def_alpha, def_beta, def_gamma, rna_enhanced)['epsC']
         score_save[k] = score
+        subs.append((rna_enhanced, k, sub))
     if rna_enhanced:
         data.append(("RNA fold enhanced", score_save))
     else:
         data.append(("RNA fold original", score_save))
 
 print(data)
+print(subs)
 xs = []
 ys = []
 for data_set in data:
@@ -117,20 +123,24 @@ plot(xs, ys, "k Values", "Score", "Score vs. k", True)
 
 # Testing alpha vs. score
 data = []
+subs = []
 for rna_enhanced in [False, True]:
     score_save = {}
     alphs = [0, 0.001, 0.01, 0.1, 0.2, 0.3, 0.5, 0.75, 0.9, 1]
     for alph in alphs:
         f_test = {"mangoI": fluorescent_seqs["mangoI"]}
         g_test = {"epsC": genes['epsC']}
-        f, score = subs_and_scores(g_test, f_test, def_k, alph, rna_enhanced)['epsC']
+        f, sub, score = subs_and_scores(g_test, f_test, def_k, alph, def_beta, def_gamma, rna_enhanced)['epsC']
         score_save[alph] = score
+        subs.append((rna_enhanced, alph, sub))
     if rna_enhanced:
         data.append(("RNA fold enhanced", score_save))
     else:
         data.append(("RNA fold original", score_save))
 
 print(data)
+print(subs)
+
 xs = []
 ys = []
 for data_set in data:
@@ -138,7 +148,7 @@ for data_set in data:
     ys.append((data_set[0], list(data_set[1].values())))
 plot(xs, ys, "α Values", "Score", "Score vs. α", True)
 
-
+raise ValueError
 # Testing length of g vs. runtime
 data = []
 for rna_enhanced in [False, True]:
@@ -149,7 +159,7 @@ for rna_enhanced in [False, True]:
         f_test = {"mangoI": fluorescent_seqs["mangoI"]}
         g_test = {"randomGene": g_len[1]}
         start_time = time.time()
-        subs_and_scores(g_test, f_test, def_k, def_alpha, rna_enhanced)
+        subs_and_scores(g_test, f_test, def_k, def_alpha, def_beta, def_gamma, rna_enhanced)
         end_time = time.time()
         time_save[g_len[0]] = end_time - start_time
     if rna_enhanced:
@@ -176,7 +186,7 @@ for rna_enhanced in [False, True]:
         f_test = {"mangoI": fluorescent_seqs["mangoI"]}
         g_test = {"randomGene": random_g}
         start_time = time.time()
-        subs_and_scores(g_test, f_test, k, def_alpha, rna_enhanced)
+        subs_and_scores(g_test, f_test, k, def_alpha, def_beta, def_gamma, rna_enhanced)
         end_time = time.time()
         time_save[k] = end_time - start_time
     if rna_enhanced:
