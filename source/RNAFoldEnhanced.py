@@ -1,6 +1,4 @@
-import sys
 from typing import List, Tuple
-import RNAFold
 
 def rna_folding_enhanced(s: str) -> List[Tuple[int, int]]:
     """
