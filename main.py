@@ -148,7 +148,7 @@ for data_set in data:
     ys.append((data_set[0], list(data_set[1].values())))
 plot(xs, ys, "α Values", "Score", "Score vs. α", True)
 
-raise ValueError
+
 # Testing length of g vs. runtime
 data = []
 for rna_enhanced in [False, True]:
@@ -200,4 +200,4 @@ ys = []
 for data_set in data:
     xs.append(list(data_set[1].keys()))
     ys.append((data_set[0], list(data_set[1].values())))
-plot(xs, ys, "α Values", "Runtime (s)", "Time vs. α", True)
+plot(xs, ys, "k Values", "Runtime (s)", "Time vs. k", True)
