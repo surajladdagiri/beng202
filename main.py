@@ -200,4 +200,4 @@ ys = []
 for data_set in data:
     xs.append(list(data_set[1].keys()))
     ys.append((data_set[0], list(data_set[1].values())))
-plot(xs, ys, "k Values", "Runtime (s)", "Time vs. k", True)
+plot(xs, ys, "k Values", "Runtime (s)", "Runtime vs. k", True)
