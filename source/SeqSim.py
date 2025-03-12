@@ -76,7 +76,8 @@ def SeqSimWithHamming(s: str, t: str, n: int, match_reward: float, mismatch_pena
     subs_and_scores = {}
     for i in range(len(s) - len(t) + 1):
         sub_str = s[i:i + len(t)]
-        score = match_reward*len(t) - mismatch_penalty*hamming(sub_str, t)
+        ham = hamming(sub_str, t)
+        score = match_reward*(len(t) - ham) - mismatch_penalty*ham
         subs_and_scores.update({sub_str: score})
     subs_and_scores = dict(sorted(subs_and_scores.items(), key=lambda x: x[1], reverse=True)[:n])
     return subs_and_scores
